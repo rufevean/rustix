@@ -7,5 +7,5 @@ Lets start with [Scanning](https://github.com/rufevean/rustix/blob/main/src/lexe
 
 
 
-This Repo is Heavily Inspired from [here](https://github.com/DoctorWkt/acwj)
+This Repo is  Inspired from [here](https://github.com/DoctorWkt/acwj)
 
