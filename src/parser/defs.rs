@@ -2,13 +2,13 @@
 
 #[derive(Debug)]
 pub struct ASTnode {
-    pub op: i32,
-    pub left: Box<ASTnode>,
-    pub right: Box<ASTnode>,
+    pub op: Option<ASTtype>,
+    pub left: Option<Box<ASTnode>>,
+    pub right: Option<Box<ASTnode>>,
     pub value: i32,
 }
 // AST node types
-
+#[derive(Debug)]
 pub enum ASTtype {
     Aadd,
     Asub,
