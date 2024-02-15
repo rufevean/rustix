@@ -1,19 +1,21 @@
 // abstract syntax tree for the language
 
+#[derive(Debug)]
 pub struct ASTnode {
-    op: i32,
-    left: Box<ASTnode>,
-    right: Box<ASTnode>,
-    value: i32,
+    pub op: i32,
+    pub left: Box<ASTnode>,
+    pub right: Box<ASTnode>,
+    pub value: i32,
 }
 // AST node types
 
 pub enum ASTtype {
-    A_ADD,
-    A_SUBTRACT,
-    A_MULTIPLY,
-    A_DIVIDE,
-    A_INTLIT,
+    Aadd,
+    Asub,
+    Amul,
+    Adiv,
+    Aint,
+    Aunknown,
 }
 
-
+// build and return a new AST node
