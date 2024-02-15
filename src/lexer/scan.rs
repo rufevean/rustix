@@ -1,12 +1,11 @@
-use crate::parser::parse;
-struct Lexer {
+pub struct Lexer {
     input: String,
     position: usize,
 }
 #[derive(Debug, Clone, PartialEq)]
 pub struct Token {
-    token_type: TokenType,
-    literal: String,
+    pub token_type: TokenType,
+    pub literal: String,
 }
 impl Token {
     fn new(token_type: TokenType, literal: String) -> Token {
@@ -17,7 +16,7 @@ impl Token {
     }
 }
 #[derive(Debug, Clone, PartialEq)]
-enum TokenType {
+pub enum TokenType {
     TInt,
     TSub,
     TAdd,
@@ -55,6 +54,12 @@ impl Lexer {
             }
         }
     }
+    pub fn new(input: String) -> Lexer {
+        Lexer {
+            input,
+            position: 0,
+        }
+    }
     fn current_char(&self) -> char {
         if self.position >= self.input.len() {
             '\0'
@@ -62,7 +67,7 @@ impl Lexer {
             Some(self.input.as_bytes()[self.position]).unwrap() as char
         }
     }
-    fn next_token(&mut self, output_vector: &mut Vec<Token>) {
+    pub fn scan(&mut self) -> Token {
         self.skip_whitespace();
         self.handle_escape_char();
         if self.position >= self.input.len() {
@@ -72,23 +77,24 @@ impl Lexer {
         match current_char {
             '+' => {
                 let current_token = Token::new(TokenType::TAdd, current_char.to_string());
-                output_vector.push(current_token);
                 self.position += 1;
+                current_token 
+
             }
             '-' => {
                 let current_token = Token::new(TokenType::TSub, current_char.to_string());
-                output_vector.push(current_token);
                 self.position += 1;
+                current_token
             }
             '*' => {
                 let current_token = Token::new(TokenType::TMul, current_char.to_string());
-                output_vector.push(current_token);
                 self.position += 1;
+                current_token
             }
             '/' => {
                 let current_token = Token::new(TokenType::TDiv, current_char.to_string());
-                output_vector.push(current_token);
                 self.position += 1;
+                current_token
             }
 
             _ => {
@@ -100,31 +106,15 @@ impl Lexer {
                         current_char = self.input.chars().nth(self.position).unwrap();
                     }
                     let current_token = Token::new(TokenType::TInt, number);
-
-                    output_vector.push(current_token);
+                    current_token
                 } else {
                     let current_token = Token::new(TokenType::TEof, current_char.to_string());
 
-                    output_vector.push(current_token);
                     self.position += 1;
+                    current_token
                 }
             }
-        };
-    }
-}
-pub fn scan(contents: &String) {
-    println!(" contains: {}", contents);
-    let mut temp_vector = Vec::new();
-
-    let mut lexer = Lexer {
-        input: contents.to_string(),
-        position: 0,
-    };
-    loop {
-        lexer.next_token(&mut temp_vector);
-        if lexer.position >= lexer.input.len() {
-            break;
         }
     }
-        parse::parse(&temp_vector);
 }
+
