@@ -1,9 +1,10 @@
 use super::defs::ASTnode;
 use super::defs::ASTtype;
+use crate::lexer::scan::Lexer;
 use crate::lexer::scan::Token;
 use crate::lexer::scan::TokenType::*;
-use crate::lexer::scan::Lexer;
 pub fn parse(input: &str) {
+    println!("Parsing: {}", input);
     let mut lexer = Lexer::new(input.to_string());
     let token = lexer.scan();
     let ast = binexpr(&mut lexer, token);
@@ -36,48 +37,43 @@ pub fn primary(token: &Token) -> ASTnode {
     }
 }
 
-
-
 pub fn binexpr(lexer: &mut Lexer, token: Token) -> ASTnode {
     let mut left = primary(&token);
     let mut token = lexer.scan();
     if token.token_type == TEof {
         return left;
     }
-    while token.token_type == TAdd || token.token_type == TSub || token.token_type == TMul || token.token_type == TDiv {
+    while token.token_type == TAdd
+        || token.token_type == TSub
+        || token.token_type == TMul
+        || token.token_type == TDiv
+    {
         let op = arithop(&token);
-        let  right = primary(&lexer.scan());
-        left = new_ast_node(op as i32, Box::new(left), Box::new(right), 0);
+        let right = primary(&lexer.scan());
+        left = new_ast_node(Some(op) , Some(Box::new(left)), Some(Box::new(right)), 0);
         token = lexer.scan();
     }
     left
 }
 
-
-
-pub fn new_ast_node(op: i32, left: Box<ASTnode>, right: Box<ASTnode>, value: i32) -> ASTnode {
+pub fn new_ast_node(
+    op: Option<ASTtype>,
+    left: Option<Box<ASTnode>>,
+    right: Option<Box<ASTnode>>,
+    value: i32,
+) -> ASTnode {
     ASTnode {
-        op: op,
-        left: left,
-        right: right,
-        value: value,
+        op,
+        left: Some(left).unwrap_or_else(|| None),
+        right: Some(right).unwrap_or_else(|| None),
+        value,
     }
 }
 
 pub fn new_ast_leaf(value: i32) -> ASTnode {
-    new_ast_node(0, Box::new(ASTnode::new()), Box::new(ASTnode::new()), value)
+    new_ast_node(None, None, None, value)
 }
 
-impl ASTnode {
-    pub fn new() -> ASTnode {
-        ASTnode {
-            op: 0,
-            left: Box::new(ASTnode::new()),
-            right: Box::new(ASTnode::new()),
-            value: 0,
-        }
-    }
-}
-pub fn new_ast_unary(op: i32, left: Box<ASTnode>, value: i32) -> ASTnode {
-    new_ast_node(op, left, Box::new(ASTnode::new()), value)
+pub fn new_ast_unary(op: Option<ASTtype>, left: Box<ASTnode>, value: i32) -> ASTnode {
+    new_ast_node(op, Some(left), None, value)
 }
