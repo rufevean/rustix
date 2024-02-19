@@ -81,7 +81,4 @@ pub fn new_ast_leaf(value: i32) -> ASTnode {
     new_ast_node(Some(ASTtype::Aint), None, None, value)
 }
 
-pub fn new_ast_unary(op: Option<ASTtype>, left: Box<ASTnode>, value: i32) -> ASTnode {
-    new_ast_node(op, Some(left), None, value)
-}
 
