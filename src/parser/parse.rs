@@ -6,6 +6,7 @@ use super::interpret::interpret;
 use crate::lexer::scan::Lexer;
 use crate::lexer::scan::Token;
 use crate::lexer::scan::TokenType::*;
+use crate::gen::gen::gen;
 pub fn parse(input: &str) {
     println!("Parsing: {}", input);
     let mut lexer = Lexer::new(input.to_string());
@@ -14,8 +15,7 @@ pub fn parse(input: &str) {
     println!("AST: {:?}", ast);
     let result = interpret(&ast);
     println!("Result: {}", result);
-    println!("{:?}", ast);
-
+   gen(&ast);
 }
 
 pub fn arithop(token: &Token) -> ASTtype {
@@ -46,6 +46,8 @@ pub fn primary(token: &Token) -> ASTnode {
 
 pub fn binexpr(lexer: &mut Lexer, token: Token) -> ASTnode {
     let mut left = primary(&token);
+
+
     let mut token = lexer.scan();
     if token.token_type == TEof {
         return left;

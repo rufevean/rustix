@@ -1,6 +1,6 @@
 // abstract syntax tree for the language
 
-#[derive(Debug)]
+#[derive(Debug,Copy)]
 pub struct ASTnode {
     pub op: Option<ASTtype>,
     pub left: Option<Box<ASTnode>>,
@@ -8,7 +8,7 @@ pub struct ASTnode {
     pub value: i32,
 }
 // AST node types
-#[derive(Debug)]
+#[derive(Debug,Copy)]
 pub enum ASTtype {
     Aadd,
     Asub,
