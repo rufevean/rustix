@@ -1,6 +1,8 @@
 use super::defs::ASTnode;
 use super::defs::ASTtype;
+
 use super::interpret::interpret;
+
 use crate::lexer::scan::Lexer;
 use crate::lexer::scan::Token;
 use crate::lexer::scan::TokenType::*;
@@ -13,8 +15,7 @@ pub fn parse(input: &str) {
     println!("AST: {:?}", ast);
     let result = interpret(&ast);
     println!("Result: {}", result);
-    gen(&ast);
-
+   gen(&ast);
 }
 
 pub fn arithop(token: &Token) -> ASTtype {
