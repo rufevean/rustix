@@ -4,10 +4,25 @@ mod minify;
 mod lexer;
 mod parser;
 use parser::parse;
+mod gen;
+use gen::decl::get_outfile;
+
 fn main() {
     let args: Vec<String> = env::args().collect();
+    if args.len() < 2 {
+        println!("Usage: {} <filename>", args[0]);
+        return;
+    }
+    
     let name = &args[1];
-    let contents = fs::read_to_string(name);
-    let minified_contents = minify::minify(&contents.unwrap());
-    parse::parse(&minified_contents);
+    match fs::read_to_string(name) {
+        Ok(contents) => {
+            parse::parse(&contents);
+        }
+        Err(_) => {
+            println!("Error occurred while reading the file");
+        }
+    } 
+    //todo -> creating a output file 
 }
+

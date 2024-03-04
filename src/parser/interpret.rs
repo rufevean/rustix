@@ -2,8 +2,14 @@ use super::defs::ASTnode;
 use super::defs::ASTtype;
 
 pub fn interpret(ast: &ASTnode) -> i32{
-    let left: i32;
-    let right: i32;
+    let mut left: i32;
+    let mut right: i32;
+    
+    while precedence(&ast.op.as_ref().unwrap()) > precedence(&ast.op.as_ref().unwrap()){
+        left = interpret(&ast.left.as_ref().unwrap());
+        right = interpret(&ast.right.as_ref().unwrap());
+    }
+
     match &ast.op.as_ref().unwrap(){
         ASTtype::Aadd => {
             left = interpret(&ast.left.as_ref().unwrap());
@@ -35,4 +41,14 @@ pub fn interpret(ast: &ASTnode) -> i32{
     }
     
 
+}
+
+pub fn precedence(op: &ASTtype) -> i32 {
+    match op {
+        ASTtype::Aadd => 1,
+        ASTtype::Asub => 1,
+        ASTtype::Amul => 2,
+        ASTtype::Adiv => 2,
+        _ => 0
+    }
 }
